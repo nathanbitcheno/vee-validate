@@ -1,33 +1,50 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    <ValidationObserver v-slot="{ handleSubmit }">
+    <form 
+      id="sign-up"
+      @submit.prevent="handleSubmit(checkOptin)"
+    >
+        <div class="formfield">   
+          <label for="username">User Name</label>
+          <ValidationProvider rules="required" v-slot="{ errors }">
+            <input
+              id="username"
+              v-model="userName"
+              type="text"
+              name="username"
+              placeholder="Please enter your username"
+              class="textfield"
+            >
+            <span class="error">{{ errors[0] }}</span>
+          </ValidationProvider>
+        </div>
+
+        <div class="formfield"> 
+          <label for="email">Email</label>
+          <ValidationProvider rules="required|email" v-slot="{ errors }">
+            <input
+              id="email"
+              v-model="email"
+              type="email"
+              name="email"
+              placeholder="Please enter your email address"
+              class="textfield"
+            >
+            <span class="error">{{ errors[0] }}</span>
+          </ValidationProvider>
+        </div>
+
+      <p>
+        <button
+          type="submit"
+        >submit
+        </button>
+      </p>
+
+    </form>
+    </ValidationObserver>
   </div>
 </template>
 
@@ -36,12 +53,38 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data () {
+    return {
+      userName: null,
+      email: null,
+      optin: false
+    }
+  },
+  methods: {
+    checkOptin: function() {
+      if(!this.userName) {
+        console.log("Not yet")
+      } else {
+      console.log(this.userName)
+      console.log(this.email)
+      console.log(this.optin)
+      }
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.hello {
+  width: 400px;
+  margin: auto;
+  margin-top: 50px;
+  text-align: left;
+  background-color: #fff;
+  padding: 80px 140px 80px 80px;
+}
 h3 {
   margin: 40px 0 0;
 }
@@ -55,5 +98,63 @@ li {
 }
 a {
   color: #42b983;
+}
+.clear {
+  clear: both;
+}
+.error {
+  color: red;
+  font-size: .9em;
+  display: block;
+}
+.formfield {
+  margin-bottom: 20px;
+}
+button {
+  padding: 20px;
+  background: rgb(219, 241, 255);
+  color: rgb(0, 110, 255);
+  font-weight: bold;
+  margin: 15px 15px 15px 0;
+  border: none;
+  cursor: pointer;
+  display: inline;
+  outline: none;
+  border-radius: 5px;
+}
+button:hover {
+  background: #b3bec5;
+}
+input {
+  padding: 20px;
+  background: rgb(219, 241, 255);
+  color: rgb(0, 110, 255);
+  font-weight: bold;
+  margin: 0px 0px 10px 0px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
+input.textfield {
+  width: 100%;
+}
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #666;
+  font-weight: bold;
+}
+label.inline {
+  display: inline;
+  margin-right: 5px;
+}
+.inline {
+  margin-right: 15px;
+}
+input.button {
+  cursor: pointer;
+}
+input.button:hover {
+  background: #b3bec5;
 }
 </style>
